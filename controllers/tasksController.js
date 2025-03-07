@@ -65,7 +65,7 @@ const updateTaskStatus = async (req, res) => {
   const { status } = req.body;
   const { taskId } = req.params;
   const userId = req.user.userId;
-  
+
   if (!status) {
     return res.status(400).json({ message: 'Status is required' });
   }
@@ -77,16 +77,16 @@ const updateTaskStatus = async (req, res) => {
       console.log(`Task with ID ${taskId} not found`);
       return res.status(404).json({ message: 'Task not found' });
     }
-    
+
     // Check if the task is assigned to the user requesting the update
     if (task.assignedTo !== userId) {
       return res.status(403).json({ message: 'You are not authorized to update this task' });
     }
-    
+
     // If user is authorized, update status
     const updatedTask = await Task.updateStatus(taskId, status);
     return res.status(200).json({
-      message: 'Task status updated',
+      message: 'Task status updated successfully',
       task: updatedTask,
     });
   } catch (err) {
@@ -100,19 +100,29 @@ const updateTaskStatus = async (req, res) => {
 const updateTask = async (req, res) => {
   const { taskId } = req.params;
   const { title, description, status, assignedTo, dueDate, priority, comments } = req.body;
-
+  
   try {
+    const existingTask = await Task.findById(taskId);
+    if (!existingTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    } 
+  
     const updatedTask = await Task.update(taskId, { title, description, status, assignedTo, dueDate, priority, comments });
     return res.status(200).json({ message: 'Task updated successfully', task: updatedTask });
   } catch (err) {
     console.error('Error updating task:', err);
     return res.status(500).json({ message: 'Internal server error' });
-  }
+  } 
 };
 
 const deleteTask = async (req, res) => {
   const { taskId } = req.params;
   try {
+    const existingTask = await Task.findById(taskId);
+    if (!existingTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    
     await Task.delete(taskId);
     return res.status(200).json({ message: 'Task deleted successfully' });
   } catch (err) {

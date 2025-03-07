@@ -32,17 +32,5 @@ build/
 docker-compose.override.yml
 
 # Databases
+task-management.db
 task-management-test.db
-task-management-test.db
-
-# Coverage directory
-coverage/
-
-# Temporary files   
-*.temp
-*.tmp
-
-# Editor direcroies and files
-.idea/
-.vscode/
-*.swp
