@@ -1,0 +1,48 @@
+# Node dependencies
+node_modules
+
+# system files
+.DS_Store
+
+# Logs
+logs
+*.log
+nm-debug.log*
+
+# Dep. directories
+jspm_packages/
+
+# npm cache
+.npm
+
+# eslint cache
+.eslintcache
+
+# REPL history
+.node_repl_history
+
+# dotenv file
+.env
+
+# Build
+dist/
+build/
+
+#Docker
+docker-compose.override.yml
+
+# Databases
+task-management-test.db
+task-management-test.db
+
+# Coverage directory
+coverage/
+
+# Temporary files   
+*.temp
+*.tmp
+
+# Editor direcroies and files
+.idea/
+.vscode/
+*.swp
