@@ -58,6 +58,11 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/task-management-backend:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/task-management-backend:latest
 
+    - name: Install Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
     - name: Deploy to Platform
       run: |
         docker-compose -f docker-compose.yml up -d
