@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
+console.log('JWT_SECRET in middleware:', JWT_SECRET);
 
 // Middleware to authenticate the JWT token
 function authenticateToken(req, res, next) {

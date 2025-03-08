@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../index');
 const { db } = require('../setupTests');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 let token;
 
