@@ -23,6 +23,7 @@ beforeAll(async () => {
     .send({ email: 'testuser@example.com', password: 'password123' });
 
   token = res.body.token;
+  console.log('Generated Token:', token);
 });
 
 afterAll((done) => {
@@ -77,6 +78,8 @@ describe('GET /test-db', () => {
     const response = await request(app)
       .get('/test-db')
       .set('Authorization', `Bearer ${token}`);
+
+    console.log('GET /test-db response:', response.body);
 
     expect(response.status).toBe(200);
     expect(response.body.tables).toBeTruthy();

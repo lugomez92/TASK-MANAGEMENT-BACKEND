@@ -25,12 +25,10 @@ function authenticateToken(req, res, next) {
 }
 
 // Middleware to authorize based on user role
-function authorizeRole(allowedRoles) {
+function authorizeRole(roles) {
   return (req, res, next) => {
-    const { role } = req.user;
-    
-    if (!allowedRoles.includes(role)) {
-      return res.status(403).json({ message: 'Access Denied: Insufficient privileges' });
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Access Denied: You do not have the required role' });
     }
     next();
   };
