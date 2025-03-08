@@ -15,6 +15,7 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
+      console.error('Token verification failed:', err);
       return res.status(403).json({ message: 'Access Denied: Invalid token' });
     }
     console.log('Decoded User: ', user);

@@ -2,19 +2,20 @@ const User = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const db = require('../data/database');
 
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Get all users (Admin Only)
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.getAll();
-    return res.status(200).json({ users });
-  } catch (err) {
-    console.error('Error fetching all users:', err);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
+const getAllUsers = (req, res) => {
+  db.all("SELECT * FROM users", [], (err, rows) => {
+    if (err) {
+      console.error('Error fetching all users:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.status(200).json({ users: rows });
+  });
 };
 
 // Create new user (Admin Only)

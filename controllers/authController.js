@@ -52,10 +52,6 @@ const login = (req, res) => {
         console.log('Error comparing password:', err);
         return res.status(400).json({ message: 'Invalid credentials' });
       }
-      if (!match) {
-        console.log('Passwords do not match');
-        return res.status(400).json({ message: 'Invalid credentials' });
-      }
 
       const token = jwt.sign(
         { 
@@ -74,6 +70,5 @@ const login = (req, res) => {
     });
   });
 };
-
 
 module.exports = { register, login };
