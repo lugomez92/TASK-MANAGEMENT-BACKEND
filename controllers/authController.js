@@ -65,6 +65,7 @@ const login = (req, res) => {
       );
 
       console.log('JWT_SECRET:', process.env.JWT_SECRET);
+      console.log('Generated Token:', token);
 
       res.status(200).json({ token });
     });
