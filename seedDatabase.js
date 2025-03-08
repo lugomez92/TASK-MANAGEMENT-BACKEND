@@ -31,7 +31,7 @@ const seedDatabase = async () => {
   for (const user of seedData.users) {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     await new Promise((resolve, reject) => {
-      db.run("INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)", [user.id, user.name, user.email, hashedPassword, user.role], (err) => {
+      db.run("INSERT INTO users (id, name, email, password, role, teamId) VALUES (?, ?, ?, ?, ?, ?)", [user.id, user.name, user.email, hashedPassword, user.role, user.teamId], (err) => {
         if (err) reject(err);
         resolve();
       });

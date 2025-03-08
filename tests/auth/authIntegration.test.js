@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../index');
 const { db } = require('../setupTests');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 let token;
 
@@ -9,8 +10,8 @@ beforeAll(async () => {
   const hashedPassword = await bcrypt.hash('password123', 10);
   await new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      ['Test User', 'testuser@example.com', hashedPassword, 'admin'],
+      "INSERT INTO users (name, email, password, role, teamId) VALUES (?, ?, ?, ?, ?)",
+      ['Test User', 'testuser@example.com', hashedPassword, 'admin', null],
       function (err) {
         if (err) reject(err);
         else resolve();
@@ -23,6 +24,7 @@ beforeAll(async () => {
     .send({ email: 'testuser@example.com', password: 'password123' });
 
   token = res.body.token;
+  console.log('Generated Token:', token);
 });
 
 afterAll((done) => {
@@ -77,6 +79,8 @@ describe('GET /test-db', () => {
     const response = await request(app)
       .get('/test-db')
       .set('Authorization', `Bearer ${token}`);
+
+    console.log('GET /test-db response:', response.body);
 
     expect(response.status).toBe(200);
     expect(response.body.tables).toBeTruthy();

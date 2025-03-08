@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
+console.log('JWT_SECRET in middleware:', JWT_SECRET);
 
 // Middleware to authenticate the JWT token
 function authenticateToken(req, res, next) {
@@ -15,6 +16,7 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
+      console.error('Token verification failed:', err);
       return res.status(403).json({ message: 'Access Denied: Invalid token' });
     }
     console.log('Decoded User: ', user);
@@ -24,12 +26,10 @@ function authenticateToken(req, res, next) {
 }
 
 // Middleware to authorize based on user role
-function authorizeRole(allowedRoles) {
+function authorizeRole(roles) {
   return (req, res, next) => {
-    const { role } = req.user;
-    
-    if (!allowedRoles.includes(role)) {
-      return res.status(403).json({ message: 'Access Denied: Insufficient privileges' });
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Access Denied: You do not have the required role' });
     }
     next();
   };

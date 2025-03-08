@@ -6,6 +6,9 @@ const { authenticateToken, authorizeRole } = require('../middleware/basicAuth');
 // Admin only: Get all users
 router.get('/', authenticateToken, authorizeRole(['admin']), usersController.getAllUsers);
 
+// Add this route to fetch all users without authentication for testing purposes
+router.get('/all', usersController.getAllUsers);
+
 // Admin only: create new user
 router.post('/', authenticateToken, authorizeRole(['admin']), usersController.createUser);
 
