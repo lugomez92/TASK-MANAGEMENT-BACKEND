@@ -16,6 +16,7 @@ const getAllUsers = async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 // Create new user (Admin Only)
 const createUser = async (req, res) => {
   const { name, email, password, role, teamId } = req.body;
