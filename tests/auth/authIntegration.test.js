@@ -9,8 +9,8 @@ beforeAll(async () => {
   const hashedPassword = await bcrypt.hash('password123', 10);
   await new Promise((resolve, reject) => {
     db.run(
-      "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-      ['Test User', 'testuser@example.com', hashedPassword, 'admin'],
+      "INSERT INTO users (name, email, password, role, teamId) VALUES (?, ?, ?, ?, ?)",
+      ['Test User', 'testuser@example.com', hashedPassword, 'admin', null],
       function (err) {
         if (err) reject(err);
         else resolve();
