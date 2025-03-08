@@ -48,9 +48,9 @@ const login = (req, res) => {
     // Compare password
     bcrypt.compare(password, user.password, (err, match) => {
       console.log('Password match status:', match);
-      if (err || !match) {
+      if (err) {
         console.log('Error comparing password:', err);
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(500).json({ message: 'Error comparing password', error: err });
       }
       if (!match) {
         console.log('Passwords do not match');
@@ -74,6 +74,5 @@ const login = (req, res) => {
     });
   });
 };
-
 
 module.exports = { register, login };
