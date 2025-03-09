@@ -31,7 +31,7 @@ const seedDatabase = async () => {
   for (const user of seedData.users) {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     await new Promise((resolve, reject) => {
-      db.run("INSERT INTO users (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)", [user.id, user.name, user.email, hashedPassword, user.role], (err) => {
+      db.run("INSERT INTO users (id, name, email, password, role, teamId) VALUES (?, ?, ?, ?, ?, ?)", [user.id, user.name, user.email, hashedPassword, user.role, user.teamId], (err) => {
         if (err) reject(err);
         resolve();
       });
@@ -66,47 +66,12 @@ const seedDatabase = async () => {
       });
     });
   }
-
-  // Update teamId for users based on their roles (Manager, PM, Engineer)
-  await updateUserTeamIds();
 };
 
-// Function to update teamId for users based on their roles (Manager, PM, Engineer)
-const updateUserTeamIds = () => {
-  return new Promise((resolve, reject) => {
-    // Update teamId for engineers (this was already done, just reiterated here)
-    seedData.teams.forEach(team => {
-      team.engineerIds.forEach(engineerId => {
-        db.run("UPDATE users SET teamId = ? WHERE id = ?", [team.id, engineerId], (err) => {
-          if (err) {
-            console.error('Error updating teamId for user (engineer):', err);
-            reject(err);
-          }
-        });
-      });
-    });
-
-    // Update teamId for Managers and PMs based on the team they're assigned to
-    seedData.teams.forEach(team => {
-      db.run("UPDATE users SET teamId = ? WHERE id = ?", [team.id, team.managerId], (err) => {
-        if (err) {
-          console.error('Error updating teamId for user (manager):', err);
-          reject(err);
-        }
-      });
-      db.run("UPDATE users SET teamId = ? WHERE id = ?", [team.id, team.pmId], (err) => {
-        if (err) {
-          console.error('Error updating teamId for user (pm):', err);
-          reject(err);
-        }
-      });
-    });
-
-    resolve();
-  });
-};
-
-module.exports = {
-  clearDatabase,
-  seedDatabase
-};
+seedDatabase().then(() => {
+  console.log('Database seeded successfully');
+  db.close();
+}).catch((err) => {
+  console.error('Error seeding database:', err);
+  db.close();
+});
