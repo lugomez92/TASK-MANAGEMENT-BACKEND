@@ -21,7 +21,7 @@ if (!process.env.JWT_SECRET) {
 
 // Middleware setup
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://task-management-frontend-mocha-one.vercel.app',
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
 }));
 app.use(express.json());
